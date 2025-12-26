@@ -26,8 +26,8 @@ app.use('/', getHomepage);
 
 (async () => {
     try {
-        //using mongoose
-        // await connection();
+        // using mongoose
+        await connection();
 
         app.listen(port, () => {
             console.log(`Backend Nodejs App listening on port ${port}`)
