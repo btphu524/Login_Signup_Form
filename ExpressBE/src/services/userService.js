@@ -1,5 +1,8 @@
+require('dotenv').config();
 const User = require("../models/user");
 const bcrypt = require('bcrypt');
+const { name } = require("ejs");
+const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 const createUserService = async (name, email, password) => {
@@ -31,10 +34,25 @@ const loginService = async (email, password) => {
             // compare password
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
+                // không truyền password vào token để tránh lộ thông tin, chỉ cần truyền định danh người dùng
+                const payload = {
+                    email: user.email,
+                    name: user.name
+                }
+
+                const access_token = jwt.sign(
+                    payload, 
+                    process.env.JWT_SECRET,
+                    { expiresIn: process.env.JWT_EXPIRES }
+                )
+
                 return {
-                    EC: 0,
-                    EM: "Login successfully",
-                    data: user
+                    access_token,
+                    user: {
+                        email: user.email,
+                        name: user.name,
+                        role: user.role
+                    }
                 }
             } else {
                 return {
