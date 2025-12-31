@@ -34,6 +34,14 @@ const getUser = async(req, res) => {
     });
 }
 
+const getAccount = async(req, res) => {
+    
+    return res.status(200).json({
+        user: req.user,
+        message: "successfully"
+    });
+}
+
 module.exports = {
-    createUser, handleLogin, getUser
+    createUser, handleLogin, getUser, getAccount
 }
